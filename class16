@@ -1,0 +1,40 @@
+import turtle
+turtle.shape("turtle")
+screen = turtle.Screen()
+screen.bgcolor("skyblue")
+turtle.color("black")
+turtle.pensize(5)
+t = turtle.Turtle()
+t.speed(1)
+def drawrect(color, x, y, w, h):
+  t.penup()
+  t.goto(x,y)
+  t.pendown()
+  t.fillcolor(color)
+  t.begin_fill()
+  for _ in range(2):
+    t.forward(w)
+    t.left(90)
+    t.forward(h)
+    t.left(90)
+  t.end_fill()
+def drawcirc(color, x, y, r):
+  t.penup()
+  t.goto(x, y -r)
+  t.fillcolor(color)
+  t.begin_fill()
+  t.circle(r)
+  t.end_fill()
+#body
+drawrect("red", -100, -50, 200, 50)
+drawrect("black", -60, 0, 120, 50)
+#windo
+drawrect("white", -55, 5, 50, 40)
+drawrect("white", 5, 5, 50, 40)
+#whel
+drawcirc("black", -60, -50, -20)
+drawcirc("black", 60, -50, -20)
+drawcirc("gray", -60, -50, 10)
+drawcirc("gray", 60, -50, 10)
+t.hideturtle()
+t.done()
