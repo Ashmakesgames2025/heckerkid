@@ -1,0 +1,31 @@
+import turtle
+import random
+screen = turtle.Screen()
+screen.title("RACING TORTOISES❕")
+screen.bgcolor("green")
+line = turtle.Turtle()
+line.penup()
+line.goto(200, 150)
+line.pendown()
+line.right(90)
+line.forward(300)
+line.hideturtle()
+colours = ["red", "blue", "black", "orange", "lightgreen"]
+turtles = []
+pos_y = 100
+for colour in colours:
+  turtle.color(colour)
+  turtle.shape("turtle")
+  turtle.penup()
+  turtle.goto(-200, pos_y)
+  pos_y -= 50
+  turtles.append(turtle)
+running = True
+while running:
+  for turtle in turtles:
+    turtle.forward(random.randint(1, 10))
+    if turtle.xcor() >= 200:
+      running = False
+      print(f"{turtle.pencolor().title()}TURTLE WINS❕❕❕❕🐢")
+      break
+screen.mainloop()
