@@ -1,0 +1,25 @@
+import turtle
+import random
+screen = turtle.Screen()
+screen.bgcolor("black")
+turtle.colormode(255)
+turtle.hideturtle()
+def firewok():
+  r = random.randint(0,255)
+  g = random.randint(0,255)
+  b = random.randint(0,255)
+  x = random.randint(-460,460)
+  y = random.randint(-260,260)
+  turtle.speed(0)
+  turtle.penup()
+  turtle.goto(x,y)
+  turtle.pendown()
+  turtle.color(r,g,b)
+  for _ in range(20):
+    turtle.fd(40)
+    turtle.rt(18)
+    turtle.goto(x,y)
+screen.onkey(firewok, "space")
+screen.onkey(screen.bye, "q")
+screen.listen()
+turtle.done()
