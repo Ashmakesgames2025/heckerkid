@@ -1,0 +1,118 @@
+import turtle
+bg = turtle.Screen()
+bg.title("Turtle Paint")
+bg.bgcolor("lightgray")
+bg.setup(width = 800, height = 600)
+brush = turtle.Turtle()
+brush.shape("turtle")
+brush.speed(0)
+brush.fillcolor("lightgray")
+move = []
+undone = []
+def up():
+  brush.setheading(90)
+  brush.fd(20)
+  move.append("up")
+def down():
+  brush.setheading(270)
+  brush.fd(20)
+  move.append("down")
+def left():
+  brush.setheading(180)
+  brush.fd(20)
+  move.append("left")
+def right():
+  brush.setheading(0)
+  brush.fd(20)
+  move.append("right")
+def red():
+  brush.color("red")
+  move.append("red")
+  brush.fillcolor("lightgray")
+def blue():
+  brush.color("blue")
+  move.append("blue")
+  brush.fillcolor("lightgray")
+def green():
+  brush.color("green")
+  move.append("green")
+  brush.fillcolor("lightgray")
+def yellow():
+  brush.color("yellow")
+  move.append("yellow")
+  brush.fillcolor("lightgray")
+def black():
+  brush.color("black")
+  move.append("black")
+  brush.fillcolor("lightgray")
+def clear():
+  brush.clear()
+  move.append("clear")
+  brush.penup()
+  brush.goto(-600, 200)
+  brush.write("Arrow keys = Move | 1 = Red | 2 = Blue | 3 = Green | 4 = Yellow | 5 = Black | 6 = Clear | 7 = Undo | 8 = Redo | 9 = Decr.size | 0 = Incr.size", font = ("Arial", 10, "bold"))
+  brush.goto(0, 0)
+  brush.pendown()
+def inc_size():
+  brush.pensize(brush.pensize() + 2)
+  move.append("inc_size")
+def dec_size():
+  brush.pensize(brush.pensize() - 2)
+  move.append("dec_size")
+def undo():
+  brush.undo()
+  undone.append(move[-1])
+  move.remove(move[-1])
+def redo():
+  if undone[-1] == "up":
+    brush.setheading(90)
+    brush.fd(20)
+  elif undone[-1] == "down":
+    brush.setheading(270)
+    brush.fd(20)
+  elif undone[-1] == "left":
+    brush.setheading(180)
+    brush.fd(20)
+  elif undone[-1] == "right":
+    brush.setheading(0)
+    brush.fd(20)
+  elif undone[-1] == "red":
+    brush.color("red")
+  elif undone[-1] == "blue":
+    brush.color("blue")
+  elif undone[-1] == "green":
+    brush.color("green")
+  elif undone[-1] == "yellow":
+    brush.color("yellow")
+  elif undone[-1] == "black":
+     brush.color("black")
+  elif undone[-1] == "clear":
+    brush.clear()
+  elif undone[-1] == "inc_size":
+    brush.pensize(brush.pensize() + 2)
+  elif undone[-1] == "dec_size":
+    brush.pensize(brush.pensize() - 2)
+  else:
+    pass
+bg.listen()
+bg.onkey(up, "Up")
+bg.onkey(down, "Down")
+bg.onkey(left, "Left")
+bg.onkey(right, "Right")
+bg.onkey(red, "1")
+bg.onkey(blue, "2")
+bg.onkey(green, "3")
+bg.onkey(yellow, "4")
+bg.onkey(clear, "6")
+bg.onkey(black, "5")
+bg.onkey(inc_size, "0")
+bg.onkey(dec_size, "9")
+bg.onkey(undo, "7")
+bg.onkey(redo, "8")
+
+brush.penup()
+brush.goto(-600, 200)
+brush.write("Arrow keys = Move | 1 = Red | 2 = Blue | 3 = Green | 4 = Yellow | 5 = Black | 6 = Clear | 7 = Undo | 8 = Redo | 9 = Decr.size | 0 = Incr.size", font = ("Arial", 10, "bold"))
+brush.goto(0, 0)
+brush.pendown()
+bg.mainloop()
