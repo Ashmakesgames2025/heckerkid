@@ -1,0 +1,52 @@
+import pygame
+import random
+pygame.init()
+WIDTH, HEIGHT = 500, 500
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Appel Catching Game")
+GRAY = (120, 120, 150)
+RED = (190, 0, 0)
+GREEN = (100, 170, 100)
+basketwidth, basketheight = 80, 20
+basketx = WIDTH // 2 - basketwidth // 2
+baskety = HEIGHT - 40
+basketspeed = 10
+ballsize = 10
+ballx = random.randint(ballsize, WIDTH - ballsize)
+bally = -ballsize
+ballspeed = 10
+score = 0
+counter = 0
+font = pygame.font.Font(None, 50)
+running = True
+while running:
+  pygame.time.delay(30)
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+  keys = pygame.key.get_pressed()
+  if keys[pygame.K_LEFT] and basketx > 0:
+    basketx -= basketspeed
+  if keys[pygame.K_RIGHT] and basketx < WIDTH - basketwidth:
+    basketx += basketspeed
+  bally += ballspeed
+#baskety(top of basket) + basketheight = bottom of basket
+#basketx(left of basket) + basketwidth = right of basket
+#ballx = center of ball
+  if (baskety < ballsize + bally < baskety + basketheight and basketx < ballx < basketx + basketwidth):
+    score += 1
+    ballx = random.randint(ballsize, WIDTH - ballsize)
+    bally = -ballsize
+  if bally > HEIGHT:
+    ballx = random.randint(ballsize, WIDTH - ballsize)
+    bally = -ballsize
+    counter += 1
+    if counter % 2 == 0:
+      score -= 1
+  screen.fill(GRAY)
+  pygame.draw.circle(screen, RED, (ballx, bally), ballsize)
+  pygame.draw.rect(screen, GREEN, (basketx, baskety, basketwidth, basketheight))
+  pygame.draw.rect(screen, (50,120,50), (0, HEIGHT - 30, WIDTH, 30))
+  screen.blit(font.render("Score: " + str(score), True, (0, 0, 0)), (10, 10))
+  pygame.display.update()
+pygame.quit()
