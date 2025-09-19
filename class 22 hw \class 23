@@ -1,0 +1,52 @@
+import pygame
+import random
+pygame.init()
+screen = pygame.display.set_mode((600,400))
+screen.fill((0,0,255))
+pygame.display.set_caption("Square Dash")
+white = (255,255,255)
+blue = (0,0,255)
+red = (255,0,0)
+green = (0,255,0)
+yellow = (255,255,0)
+purple = (128,0,128)
+orange = (245, 130, 90)
+black = (0,0,0)
+playerx = 75
+playery = 175
+enemyx = 600
+enemyy = random.randint(0,350)
+running = True
+while running:
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+  def up():
+    if playery > 0:
+      playery -= 20
+    else:
+      playery = 0
+  def down():
+    if playery < 350:
+      playery += 20
+    else:
+      playery = 350
+  def enemy():
+    enemyx -= 10
+    if enemyx < playerx:
+      enemyx = 600
+      enemyy = random.randint(0,350)
+  key = pygame.key.get_pressed()
+  if key[pygame.K_DOWN]:
+    down()
+  if key[pygame.K_UP]:
+    up()
+  enemy()
+  if (playerx < enemyx + 50 and playerx + 50 > enemyx and 
+    playery < enemyy + 50 and playery + 50 > enemyy):
+    running = False
+  screen.fill(yellow)
+  pygame.draw.rect(screen,(orange),(playerx,playery,50,50))
+  pygame.draw.rect(screen,(white),(enemyx,enemyy,50,50))
+  pygame.display.update()
+pygame.quit()
