@@ -1,0 +1,30 @@
+import pygame
+screen = pygame.display.set_mode((600,400))
+pygame.display.set_caption("We|rD w0rLd")
+white = (255,255,255)
+lblue = (174,174,255)
+blue = (0,0,255)
+red = (255,0,0)
+green = (0,255,0)
+yellow = (255,255,0)
+purple = (128,0,128)
+orange = (245, 130, 90)
+black = (0,0,0)
+screen.fill(lblue)
+pygame.draw.rect(screen, orange, (240,200,100,100))
+pygame.draw.polygon(screen, purple, [(240,200), (340,200), (290,150)])
+pygame.draw.rect(screen, red, (285, 240, 40, 80))
+pygame.draw.circle(screen, black, (0, 0), 125)
+pygame.draw.rect(screen, blue, (360,200,100,100))
+pygame.draw.polygon(screen, green, [(360,200), (460,200), (410,150)])
+pygame.draw.rect(screen, white, (405, 240, 40, 80))
+pygame.draw.rect(screen, purple, (95, 200, 20, 120))
+pygame.draw.circle(screen, white, (105, 150), 50)
+pygame.draw.rect(screen, yellow, (0,300,600,100))
+running = True
+while running:
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+  pygame.display.update()
+pygame.quit()
