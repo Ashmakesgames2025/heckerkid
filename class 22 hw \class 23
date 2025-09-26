@@ -2,6 +2,7 @@ import pygame
 import random
 pygame.init()
 screen = pygame.display.set_mode((600,400))
+clock = pygame.time.Clock()
 screen.fill((0,0,255))
 pygame.display.set_caption("Square Dash")
 white = (255,255,255)
@@ -16,37 +17,37 @@ playerx = 75
 playery = 175
 enemyx = 600
 enemyy = random.randint(0,350)
+score = 0
+font = pygame.font.SysFont("none",50)
 running = True
 while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       running = False
-  def up():
+    else:
+      playery = 350
+  key = pygame.key.get_pressed()
+  if key[pygame.K_DOWN]:
+    if playery < 350:
+      playery += 20
+  if key[pygame.K_UP]:
     if playery > 0:
       playery -= 20
     else:
       playery = 0
-  def down():
-    if playery < 350:
-      playery += 20
-    else:
-      playery = 350
-  def enemy():
-    enemyx -= 10
-    if enemyx < playerx:
-      enemyx = 600
-      enemyy = random.randint(0,350)
-  key = pygame.key.get_pressed()
-  if key[pygame.K_DOWN]:
-    down()
-  if key[pygame.K_UP]:
-    up()
-  enemy()
+  enemyx -= 10
+  if enemyx < playerx:
+    enemyx = 600
+    enemyy = random.randint(0,350)
+    score += 1
   if (playerx < enemyx + 50 and playerx + 50 > enemyx and 
     playery < enemyy + 50 and playery + 50 > enemyy):
     running = False
   screen.fill(yellow)
   pygame.draw.rect(screen,(orange),(playerx,playery,50,50))
   pygame.draw.rect(screen,(white),(enemyx,enemyy,50,50))
+  text = font.render(f"Score-{score}", False, green )
+  screen.blit(text,(20,20))
   pygame.display.update()
+  clock.tick(60)
 pygame.quit()
