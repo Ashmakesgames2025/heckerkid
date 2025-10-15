@@ -1,0 +1,61 @@
+import pygame
+pygame.init()
+screen = pygame.display.set_mode((600,400))
+pygame.display.set_caption("Park Scenery")
+white = (255,255,255)
+lblue = (174,174,255)
+blue = (0,0,255)
+red = (255,0,0)
+dgreen = (0,100,0)
+green = (0,205,0)
+lgreen = (0,255,0)
+yellow = (255,255,0)
+purple = (128,0,128)
+orange = (245, 130, 90)
+brown = (131, 105, 83)
+black = (0,0,0)
+lgray = (211, 211, 211)
+tan = (251, 238, 172)
+lbrown = (222, 184, 135)
+screen.fill(lblue)
+running = True
+while running:
+  pygame.draw.rect(screen, green, (0, 300, 600, 100))#grass
+  pygame.draw.rect(screen, tan, (260, 335, 600, 30))#path
+  pygame.draw.rect(screen, red, (200, 200, 150, 150))#haus
+  pygame.draw.line(screen, white, (200, 200), (350, 350), 5)
+  pygame.draw.line(screen, white, (200, 350), (350, 200), 5)
+  pygame.draw.rect(screen, black, (200, 200, 150, 150), 5)
+  pygame.draw.rect(screen, lbrown, (260, 270, 40, 80))
+  pygame.draw.rect(screen, black, (260, 270, 40, 80), 5)  
+  pygame.draw.circle(screen, yellow, (270, 310), 5)
+  pygame.draw.circle(screen, black, (270, 310), 5, 1)
+  pygame.draw.polygon(screen, red, [(190,200),(360,200),(275,125)])
+  pygame.draw.polygon(screen, black, [(190,200),(360,200),(275,125)],5)
+  pygame.draw.rect(screen, brown, (90, 230, 20, 80))#tres
+  pygame.draw.circle(screen, dgreen, (100, 200),50)
+  pygame.draw.rect(screen, black, (90, 230, 20, 80),5)
+  pygame.draw.circle(screen, black, (100, 200),50, 5)
+  pygame.draw.rect(screen, brown, (140, 230, 20, 80))
+  pygame.draw.circle(screen, dgreen, (150, 200),40)
+  pygame.draw.rect(screen, black, (140, 230, 20, 80), 5)
+  pygame.draw.circle(screen, black, (150, 200),40, 5)
+  pygame.draw.circle(screen, orange, (590, 10),105)#sun
+  pygame.draw.circle(screen, yellow, (590, 10),100)
+  pygame.draw.ellipse(screen, white, (300, 40, 120, 60))#clouds
+  pygame.draw.ellipse(screen, lgray, (300, 40, 120, 60), 5)
+  pygame.draw.ellipse(screen, white, (350, 50, 100, 50))
+  pygame.draw.ellipse(screen, lgray, (350, 50, 100, 50), 5)
+  pygame.draw.line(screen, brown, (0, 370), (600, 370), 10)#fens
+  for x in range(0, 600, 20):
+    pygame.draw.line(screen, brown, (x, 360), (x, 401), 10)
+  pygame.draw.line(screen, black, (40, 30), (55, 45), 10)
+  pygame.draw.line(screen, black, (70, 30), (55, 45), 10)
+  pygame.draw.line(screen, black, (50, 50), (65, 65), 10)
+  pygame.draw.line(screen, black, (80, 50), (65, 65), 10)
+
+  pygame.display.update()
+  for event in pygame.event.get():
+    if event.type == pygame.quit:
+      running = False
+pygame.quit()
