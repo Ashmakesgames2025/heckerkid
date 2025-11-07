@@ -1,0 +1,36 @@
+import pygame
+import random
+pygame.init()
+screen = pygame.display.set_mode((600,400))
+pygame.display.set_caption("Night Scenery")
+dblue = (10, 10, 60)
+dblu = (20, 20, 90)
+dgreen = (60, 10, 20)
+lyellow = (255, 255, 200)
+white = (255, 255, 255)
+screen.fill(dblue)
+running = True
+def moon():
+  pygame.draw.circle(screen ,lyellow, (540, 50), 40)
+  pygame.draw.circle(screen, dblue, (550, 45), 30)
+stars = []
+for i in range(100):
+  x = random.randint(10, 590)
+  y = random.randint(10, 390)
+  size = random.randint(1, 3)
+  stars.append([x, y, size])
+def drawstar():
+  for star in stars:
+    x, y, size = star
+    pygame.draw.circle(screen, white, (x, y), size) 
+while running:
+  drawstar()
+  moon()
+  drawstar()
+  pygame.draw.rect(screen, dblu, (0, 300, 600, 300))
+  pygame.draw.polygon(screen, dgreen, [(0, 300), (150, 200), (300, 290), (450, 200), (600, 300)])
+  pygame.display.update()
+  for event in pygame.event.get():
+    if event.type == pygame.quit:
+      running = False
+pygame.quit()
