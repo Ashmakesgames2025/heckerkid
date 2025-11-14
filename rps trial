@@ -1,0 +1,61 @@
+import pygame
+import random
+pygame.init()
+white = (255, 255, 255)
+green = (0, 255, 0)
+black = (0, 0, 0)
+lgray = (211, 211, 211)
+red = (255, 0, 0)
+screen = pygame.display.set_mode((600, 400))
+opt = ["rock", "paper", "scissors"]
+pc = ""     #c = choice
+cc = ""
+result = ""
+def text(info, x, y, size, color = black):
+  font = pygame.font.SysFont("none",size)
+  text = font.render(info, False, color)
+  screen.blit(text,(x,y))
+def rok(r,k):
+  pygame.draw.circle(screen, lgray, (r, k), 35)
+  pygame.draw.circle(screen, black, (r, k), 35, 5)
+def ppr(p, r):
+  pygame.draw.rect(screen, black, (p - 30, r - 40, 60, 80), 5)
+def sisors(s, i):
+  pygame.draw.line(screen, black, (s - 10, i - 10), (s + 10, i + 10), 5)
+  pygame.draw.line(screen, black, (s - 10, i + 10), (s - 10, i + 10), 5)
+  pygame.draw.circle(screen, red, (s, i), 7)
+running = True
+while running:
+  screen.fill(white)
+  text("Press R, P or S", 100, 50, 75)
+  text("rock, paper, scissors!", 170, 120, 30)
+  text(f"result = {result}", 200, 300, 90)
+  if pc == "rock":
+     rok(200, 230)
+  elif pc == "paper":
+    ppr(200, 230)
+  elif pc == "scissors":  
+    sisors(200, 230)
+  pygame.display.update()
+  for event in pygame.event.get():
+    if event.type == pygame.quit:
+      running = False
+    elif event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_r:
+        pc = "rock"
+      elif event.key == pygame.K_p:
+        pc = "scissors"
+      elif event.key == pygame.K_s:
+        pc = "scissors"
+      else:
+        pc = ""
+      if pc:
+        cc = random.choice(opt)
+        if pc == cc:
+          result = "Tie"
+        elif(pc == "rock" and cc == "scissors") or (pc == "scissors" and cc == "paper") or(pc == "paper" and cc == "rock"):
+          result = "computer win"
+      else:
+        result = "player win"
+             
+pygame.quit()
