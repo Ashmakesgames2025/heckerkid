@@ -36,6 +36,12 @@ while running:
     ppr(200, 230)
   elif pc == "scissors":  
     sisors(200, 230)
+  if cc == "rock":
+     rok(400, 230)
+  elif cc == "paper":
+    ppr(400, 230)
+  elif cc == "scissors":  
+    sisors(400, 230)
   pygame.display.update()
   for event in pygame.event.get():
     if event.type == pygame.quit:
@@ -57,5 +63,5 @@ while running:
           result = "computer win"
       else:
         result = "player win"
-             
+
 pygame.quit()
