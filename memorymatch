@@ -1,0 +1,56 @@
+import pygame
+import random
+pygame.init()
+screen = pygame.display.set_mode((500, 500))
+pygame.display.set_caption("Memory match!")
+font = pygame.font.Font(None, 40)
+values = ["A", "A", "B", "B", "C", "C", "D", "D"]
+random.shuffle(values)
+cards = []
+for i in range(8):
+  rect = pygame.Rect(50 + (i % 4) * 110, 100 + (i// 4) * 150, 100, 140)
+  cards.append({"rect": rect, "value": values[i], "revealed": False, "matched": False})
+card1 = None
+card2 = None
+timer = 0
+pairfound = 0
+running = True
+while running:
+  screen.fill((240, 240, 240))
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      for c in cards:
+        if c["rect"].collidepoint(event.pos):
+          if not c["revealed"] and not c["matched"]:
+            c["revealed"] = True
+            if card1 is None:
+              card1 = c
+            elif card2 is None:
+              card2 = c
+              timer = pygame.time.get_ticks()
+  if card1 and card2:
+    if pygame.time.get_ticks() - timer > 700:
+      if card1["value"] == card2["value"]:
+        card1["matched"] = True
+        card2["matched"] = True
+      else:
+        card1["revealed"] = False
+        card2["revealed"] = False
+      card1 = None
+      card2 = None
+  for c in cards:
+    if c["matched"]:
+     pygame.draw.rect(screen, (0, 150, 0), c["rect"])
+    elif c["revealed"]:
+      pygame.draw.rect(screen, (255, 255, 255), c["rect"])
+      text = font.render(c["value"], True, (0, 0, 0))
+      screen.blit(text, (c["rect"].x + 40, c["rect"].y + 50))
+    else:
+      pygame.draw.rect(screen, (100, 150, 255), c["rect"])
+  if pairfound == 4:
+    win = font.render("yay!", True, (0, 120, 0))
+    screen.blit(win ,(190, 30))
+    pygame.display.update()
+pygame.quit()
