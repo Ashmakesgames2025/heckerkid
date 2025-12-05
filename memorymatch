@@ -35,6 +35,7 @@ while running:
       if card1["value"] == card2["value"]:
         card1["matched"] = True
         card2["matched"] = True
+        pairfound += 1
       else:
         card1["revealed"] = False
         card2["revealed"] = False
@@ -52,5 +53,5 @@ while running:
   if pairfound == 4:
     win = font.render("yay!", True, (0, 120, 0))
     screen.blit(win ,(190, 30))
-    pygame.display.update()
+  pygame.display.update()
 pygame.quit()
