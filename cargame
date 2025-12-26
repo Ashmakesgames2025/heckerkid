@@ -9,7 +9,7 @@ lblue = (150, 150, 255)
 black = (0, 0, 0)
 grey = (150, 150, 150)
 green = (0, 155, 0)
-carx1 = 300
+carx1 = 290
 cary1 = 350
 cwidth = 60
 clength = 40
@@ -20,10 +20,16 @@ rint2 = random.randint(30, 100)
 r = random.randint(0, 100)
 g = random.randint(155, 255)
 b = random.randint(100, 200)
+color = (r, g, b)
 obsx = 250
 obsy = -50
+score = 0
 clock = pygame.time.Clock()
-def obstacles(r = r, g = g, b = b, len = clength, wid = cwidth, y = obsy, x = obsx):
+def text(x, y, size, info, color = color):
+  font = pygame.font.SysFont("none",size)
+  text = font.render(info, False, color)
+  screen.blit(text,(x,y))
+def obstacles(x, y, r = r, g = g, b = b, len = clength, wid = cwidth):
   pygame.draw.circle(screen, black, (x, y), 5)
   pygame.draw.circle(screen, black, (x + len, y), 5)
   pygame.draw.circle(screen, black, (x, y + 1.5 * wid), 5)
@@ -72,6 +78,9 @@ def kar(color, x, y, len, wid):
   pygame.draw.rect(screen, black, (x + len, y + wsize, wsize, wsize))
   pygame.draw.rect(screen, black, (x - wsize, y + wid - wsize, wsize, wsize))
   pygame.draw.rect(screen, black, (x + len, y + wid - wsize, wsize, wsize))
+  if (x + len == obsx) or (x == obsx + len) or (y + wid == obsy) or (y == obsy + 1.5*wid):
+    text(200, 200, 50, "GAME OVER")
+    
 running = True
 while running:
   screen.fill(green)
@@ -98,6 +107,7 @@ while running:
   obsy += 5
   if obsy >= 400:
     obsy = -50
+    score += 1
   pygame.draw.rect(screen, grey, (100, 0, 400, 400))
   pygame.draw.line(screen, white, (100, 0), (100, 400), 20)
   pygame.draw.line(screen, white, (500, 0), (500, 400), 20)
@@ -107,7 +117,8 @@ while running:
   signs(20, 100, blue, 1)
   signs(550, 70, white, 1)
   signs(530, 320, white, 2)
-  obstacles()
+  text(10, 10, 40, f"score: {score}")
+  obstacles(obsx, obsy)
   clock.tick(40)
   pygame.display.update()
 pygame.quit()
