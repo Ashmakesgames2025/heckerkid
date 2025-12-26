@@ -9,7 +9,7 @@ lblue = (150, 150, 255)
 black = (0, 0, 0)
 grey = (150, 150, 150)
 green = (0, 155, 0)
-carx1 = 290
+carx1 = 2900
 cary1 = 350
 cwidth = 60
 clength = 40
@@ -24,6 +24,7 @@ color = (r, g, b)
 obsx = 250
 obsy = -50
 score = 0
+gameover = False
 clock = pygame.time.Clock()
 def text(x, y, size, info, color = color):
   font = pygame.font.SysFont("none",size)
@@ -78,9 +79,10 @@ def kar(color, x, y, len, wid):
   pygame.draw.rect(screen, black, (x + len, y + wsize, wsize, wsize))
   pygame.draw.rect(screen, black, (x - wsize, y + wid - wsize, wsize, wsize))
   pygame.draw.rect(screen, black, (x + len, y + wid - wsize, wsize, wsize))
-  if (x + len == obsx) or (x == obsx + len) or (y + wid == obsy) or (y == obsy + 1.5*wid):
-    text(200, 200, 50, "GAME OVER")
-    
+def checkcollision():
+  hitboxp = (carx1, cary1, clength, cwidth)
+  hitboxo = (obsx, obsy, clength, 1.5*cwidth)
+  return hitboxp.colliderect(hitboxo)
 running = True
 while running:
   screen.fill(green)
