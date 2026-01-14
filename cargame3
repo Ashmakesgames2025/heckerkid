@@ -1,0 +1,177 @@
+import pygame
+import random
+pygame.init()
+screen = pygame.display.set_mode((600, 400))
+white = (255, 255, 255)
+red = (255, 0, 0)
+blue = (0, 0, 255)
+lblue = (150, 150, 255)
+black = (0, 0, 0)
+grey = (150, 150, 150)
+green = (0, 155, 0)
+carx1 = 280
+cary1 = 350
+cwidth = 60
+clength = 40
+sped = 5
+wsize = 8
+rint = random.randint(30, 100)
+rint2 = random.randint(30, 100)
+r = random.randint(0, 100)
+g = random.randint(155, 255)
+b = random.randint(100, 200)
+color = (r, g, b)
+obsx = 400
+obsy = -50
+obsx2 = 250
+obsy2 = -70
+obsx3 = 100
+obsy3 = -90
+score = 0
+gameover = False
+clock = pygame.time.Clock()
+def text(x, y, size, info, color = color):
+  font = pygame.font.SysFont("none",size)
+  text = font.render(info, False, color)
+  screen.blit(text,(x,y))
+def obstacles(x, y, r, g, b, wid, len = clength):
+  pygame.draw.circle(screen, black, (x, y), 5)
+  pygame.draw.circle(screen, black, (x + len, y), 5)
+  pygame.draw.circle(screen, black, (x, y + 1.5 * wid), 5)
+  pygame.draw.circle(screen, black, (x + len, y + 1.5 * wid), 5)
+  pygame.draw.rect(screen, (r, g, b), (x, y, len, 1.5 * wid))
+  pygame.draw.rect(screen, black, (x, y, len, 1.5 * wid), 3)
+  pygame.draw.rect(screen, (lblue), (x + 5, y + wid - 5, len - 10, 0.5 * wid))
+def signs(x, y, color, bno, rand = rint, rand2 = rint2):
+  pygame.draw.rect(screen, color, (x, y, 40, 50))
+  pygame.draw.rect(screen, black, (x, y, 40, 50), 5)
+  pygame.draw.rect(screen, grey, (x + 20, y + 50, 5, 50))
+  if color == red:
+    for a in range(3):
+      b = (a * 10) + 13
+      pygame.draw.rect(screen, white, (x + 10,  y + b, 20, 5))
+  elif color == blue:
+    pygame.draw.polygon(screen, white, [(x + 20, y + 10), (x + 10, y + 20), (x + 30, y + 20)])
+    pygame.draw.rect(screen, white, (x + 15, y + 20, 10, 20))
+  else:
+    pygame.draw.rect(screen, black, (x, y, 40, 12))
+    if rand == 69:
+      rand = 68
+    str = (f"{rand}")
+    str2 = (f"{rand2}")
+    if bno == 1:
+      font = pygame.font.SysFont("none",25)
+      text = font.render(str, False, black)
+      screen.blit(text, (x + 15, y + 25))
+    if bno == 2:
+      font = pygame.font.SysFont("none",25)
+      text = font.render(str2, False, black)
+      screen.blit(text, (x + 15, y + 25))
+def lines():
+  for i in range(6):
+    i = i * (70 + i)
+    pygame.draw.rect(screen, white, (295, i, 10, 40))
+  for j in range(10):
+    y = j * 40
+    pygame.draw.rect(screen, red, (91, y, 20, 21))
+    pygame.draw.rect(screen, red, (491, y, 20, 21))
+def kar(color, x, y, len, wid):
+  pygame.draw.rect(screen, color, (x, y, len, wid))
+  pygame.draw.rect(screen, lblue, (x + 5, y + 5, len - 10, wid // 2 - 20))
+  pygame.draw.rect(screen, black, (x, y, len, wid), 2)
+  pygame.draw.rect(screen, black, (x - wsize, y + wsize, wsize, wsize))
+  pygame.draw.rect(screen, black, (x + len, y + wsize, wsize, wsize))
+  pygame.draw.rect(screen, black, (x - wsize, y + wid - wsize, wsize, wsize))
+  pygame.draw.rect(screen, black, (x + len, y + wid - wsize, wsize, wsize))
+def checkcollision():
+  player = pygame.Rect(carx1, cary1, clength, cwidth)
+  obs1 = pygame.Rect(obsx, obsy, clength, int(1.5*cwidth))
+  obs2 = pygame.Rect(obsx2, obsy2, clength, int(1.5*cwidth))
+  obs3 = pygame.Rect(obsx3, obsy3, clength, int(1.5*cwidth))
+
+  return player.colliderect(obs1) or player.colliderect(obs2) or player.colliderect(obs3)
+def endgamescreen():
+  overlay = pygame.Surface((600, 400))
+  overlay.set_alpha(150)
+  overlay.fill(blue)
+  screen.blit(overlay, (0, 0))
+  text(180, 120, 72, "GAME OVER")
+  text(240, 200, 36, f"Final score:{score}")
+running = True
+while running:
+  screen.fill(green)
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+  keys = pygame.key.get_pressed()
+  if keys[pygame.K_LEFT]:
+    carx1 -= sped
+  elif keys[pygame.K_RIGHT]:
+    carx1 += sped
+  elif keys[pygame.K_UP]:
+    cary1 -= 2 * sped
+  elif keys[pygame.K_DOWN]:
+    cary1 += sped
+  if carx1 < 100:
+    carx1 = 100
+  elif carx1 > 500 - clength:
+    carx1 = 500 - clength
+  if cary1 > 400 - cwidth:
+    cary1 = 400 - cwidth
+  elif cary1 < 0:
+    cary1 = 0
+  obsy += 5
+  if obsy >= 400:
+    obsy = -50
+    obsx = random.randint(100, 460)
+    score += 1
+  obsy2 += 7
+  if obsy2 >= 400:
+    obsy2 = -60
+    obsx2 = random.randint(100, 460)
+    score += 1
+  obsy3 += 3
+  if obsy3 >= 400:
+    obsy3 = -60
+    obsx3 = random.randint(100, 460)
+    score += 1
+  pygame.draw.rect(screen, grey, (100, 0, 400, 400))
+  pygame.draw.line(screen, white, (100, 0), (100, 400), 20)
+  pygame.draw.line(screen, white, (500, 0), (500, 400), 20)
+  lines()
+  kar(red, carx1, cary1, clength, cwidth)
+  signs(40, 250, red, 1)
+  signs(20, 100, blue, 1)
+  signs(550, 70, white, 1)
+  signs(530, 320, white, 2)
+  text(10, 10, 40, f"score: {score}")
+  obstacles(obsx, obsy, g, r, b, cwidth)
+  obstacles(obsx2, obsy2, b, g, r, 1.5*cwidth)
+  obstacles(obsx3, obsy3, r, b, g, 1.5*clength)
+  if checkcollision():
+    gameover = True
+  if gameover:
+    endgamescreen()
+    pygame.display.update()
+    clock.tick(1)
+    if keys[pygame.K_r]:
+      carx1 = 280
+      cary1 = 350
+      rint = random.randint(30, 100)
+      rint2 = random.randint(30, 100)
+      r = random.randint(0, 100)
+      g = random.randint(155, 255)
+      b = random.randint(100, 200)
+      color = (r, g, b)
+      obsx = 400
+      obsy = -50
+      obsx2 = 300
+      obsy2 = -70
+      obsx3 = 190
+      obsy3 = -90
+      score = 0
+      gameover = False
+    continue
+  clock.tick(40)
+  pygame.display.update()
+pygame.quit()
