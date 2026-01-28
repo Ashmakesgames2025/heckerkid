@@ -1,0 +1,95 @@
+import random
+import pygame
+pygame.init()
+screen = pygame.display.set_mode((600, 400))
+clock = pygame.time.Clock()
+white = (255, 255, 255)
+lblue = (150, 150, 255)
+lbrown = (211, 182, 131)
+red = (255, 0, 0)
+black = (0, 0, 0)
+green = (0, 255, 0)
+yellow = (255, 255, 0)
+orange = (255, 165, 0)
+purple = (200, 0, 200)
+brown = (139, 69, 19)
+score = 0
+missed = 0
+maxmissed = 5
+spawntime = 0
+spawndelay = 60 #(1 froot per 6O seconds)
+mousetrail = []
+fruits = []
+def spawn_fruit():
+  fruit = {
+      "x": random.randint(50, 600 - 50),
+      "y": 440,
+      "vx": random.randint(-3, 3),
+      "vy": random.randint(-20, -10),
+      "color": random.choice([red, green, orange, yellow, purple]),
+      "radius": 35,
+      "sliced": False
+  }
+  fruits.append(fruit)
+def drawfrut(fruit):
+  if not fruit['sliced']:
+    if fruit['color'] != green:
+      pygame.draw.circle(screen, fruit['color'], (fruit['x'], fruit['y']), fruit['radius'])
+      pygame.draw.circle(screen, white, (fruit['x'] - 5, fruit['y'] - 5), fruit['radius'] // 4)
+    if fruit['color'] == yellow:
+      #side appendages
+      pygame.draw.circle(screen, fruit['color'], (fruit['x'] - fruit['radius'], fruit['y']), fruit['radius'] // 3)
+      pygame.draw.circle(screen, fruit['color'], (fruit['x'] + fruit['radius'], fruit['y']), fruit['radius'] // 3)
+    
+    elif fruit['color'] == red:
+      #stem
+      pygame.draw.rect(screen, brown, (int(fruit['x'] + 2), int(fruit['y'] - fruit['radius'] - 10), 6, 10))
+      #brown near stem
+      pygame.draw.circle(screen, lbrown, (fruit['x'], fruit['y'] - fruit['radius'] + fruit['radius'] // 3), fruit['radius'] // 3)
+    
+    elif fruit['color'] == green:
+      #body
+      pygame.draw.circle(screen, fruit['color'], (fruit['x'] - fruit['radius'], fruit['y']), fruit['radius'])
+      pygame.draw.circle(screen, fruit['color'], (fruit['x'] + fruit['radius'], fruit['y']), fruit['radius'])
+      pygame.draw.rect(screen, fruit['color'], (fruit['x'] - fruit['radius'], fruit['y'] - fruit['radius'], 2 * fruit['radius'], 2 * fruit['radius']))
+      #stripe
+      pygame.draw.rect(screen, black, (fruit['x'] - 2 * fruit['radius'], fruit['y'] - fruit['radius'] // 4, 4 * fruit['radius'],fruit['radius'] // 2))
+    
+    elif fruit['color'] == orange:
+      #orange stem end
+      pygame.draw.circle(screen, (252, 210, 153), (int(fruit['x']), int(fruit['y'] - (3 * fruit['radius'] // 4))), fruit['radius'] // 4)
+    
+    elif fruit['color'] == purple:
+      #stem
+      pygame.draw.rect(screen, brown, (int(fruit['x'] + 2), int(fruit['y'] - fruit['radius'] - 10), 6, 10))
+def update(fruit):
+  fruit["x"] += fruit["vx"]
+  fruit["y"] += fruit["vy"]
+  fruit["vy"] += 0.5
+def checksliced(fruit, xmouse, ymouse):
+  distanse = ((fruit["x"] - xmouse)**2 +(fruit["y"] - ymouse)**2)**0.5
+  return distanse < fruit["radius"]
+def drawscore():
+  font = pygame.font.Font(None, 48)
+  scoretext = font.render(f"Score: {score}", True, white)
+  screen.blit(scoretext, (20, 20))
+
+  misstext = font.render(f"Missed: {missed}", True, red)
+  screen.blit(misstext, (20, 70))
+spawn_fruit()
+running = True
+while running:
+  screen.fill(lblue)
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+    #if event.type == pygame.KEYDOWN:
+      #if event.key == pygame.K_r and gameover:
+        #resetgame()
+  for fruit in fruits:
+    drawfrut(fruit)
+  for fruit in fruits:
+    update(fruit)
+  pygame.display.update()
+  clock.tick(60)
+pygame.quit()
