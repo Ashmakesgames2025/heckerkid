@@ -1,0 +1,124 @@
+import pygame
+import random
+import math
+pygame.init()
+screen = pygame.display.set_mode((600, 400))
+pygame.display.set_caption("Weather control centre")
+clock = pygame.time.Clock()
+white = (255, 255, 255)
+lblue = (150, 150, 255)
+blue = (0, 0, 255)
+lbrown = (211, 182, 131)
+red = (255, 0, 0)
+black = (0, 0, 0)
+green = (34, 139, 34)
+yellow = (255, 255, 0)
+orange = (255, 165, 0)
+SkyColors = {
+  'day' : lblue,
+  'evening' : orange,
+  'night' : (30, 30, 117)
+}
+SkyNow = 'day'
+SkyColor = SkyColors[SkyNow]
+# Weather
+rain =[]
+snow = []
+clouds = []
+LightningTimer = 0
+for i in range(3):
+  cloud = {
+    'x' : random.randint(0, 400),
+    'y' : random.randint(37, 150),
+    'sped' : random.uniform(0.50, 1.50)
+  }
+  clouds.append(cloud)
+WindStrength = 0
+running = True
+raining = False
+snowing = False
+while running:
+  pygame.display.update()
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+    if event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_r:
+        raining = not raining
+        snowing = False
+      elif event.key == pygame.K_s:
+        snowing = not snowing
+        raining = False
+      elif event.key == pygame.K_l:
+        LightningTimer = random.randint(7, 13)
+      elif event.key == pygame.K_c:
+        NewCloud = {
+          'x' : random.randint(0, 400),
+          'y' : random.randint(37, 150),
+          'sped' : random.uniform(0.50, 1.50)
+        }
+        clouds.append(NewCloud)
+      elif event.key == pygame.K_t:
+        times = ['day', 'evening', 'night']
+        IndexNow = times.index(SkyNow)
+        SkyNow = times[(IndexNow + 1) % len(times)]
+        SkyColor = SkyColors[SkyNow]
+      elif event.key == pygame.K_w:
+        WindStrength = 2 if WindStrength == 0 else 0
+  if raining and random.random() < 0.3:
+    rain.append([random.randint(0, 600), 0])
+  if snowing and random.random() < 0.2:
+    snow.append([random.randint(0, 600), 0, random.uniform(-0.5, 0.5)])
+  for drop in rain[:]:
+    drop[1] += 8
+    drop[0] += WindStrength
+    if drop[1] > 400:
+      rain.remove(drop)
+  for flake in snow:
+    flake[1] += 2
+    flake[0] += flake[2] + WindStrength*0.5
+    if flake[1] > 400:
+      snow.remove(flake)
+  for cloud in clouds:
+    cloud['x'] += cloud['sped']
+    if cloud['x'] > 700:
+      cloud['x'] = -100
+
+  screen.fill(SkyColor)
+
+  pygame.draw.rect(screen, green, (0, 300, 600, 100))
+
+  for cloud in clouds:
+    pygame.draw.ellipse(screen, white, (cloud['x'], cloud['y'], 100, 50))
+    pygame.draw.ellipse(screen, white, (cloud['x'] + 30, cloud['y'] - 20, 80, 50))
+
+  for drop in rain:
+    pygame.draw.line(screen, blue, (drop[0], drop[1]), (drop[0], drop[1] + 10), 3)
+
+  for flake in snow:
+    pygame.draw.circle(screen, white, (int(flake[0]), int(flake[1])), 5)
+
+  if LightningTimer > 0:
+    screen.fill((255, 255, 200))
+    x = random.randint(100, 500)
+    points = [x, 0]
+    for i in range(5):
+      x += random.randint(-30, 30)
+      y = (i + 1) * 80
+      points.append((x, y))
+    pygame.draw.lines(screen, yellow, False, points, 3)
+    LightningTimer -= 1
+
+  font = pygame.font.Font(None, 24)
+  instr = ["R: rain | S: snow | L: lightning", 
+          "C: add cloud | T: time | W: wind", 
+          f"Weather : {'Raining' if raining else 'Snowing' if snowing else 'Cloudy' if len(clouds) > 10 else 'Clear'}"]
+
+  for i, text in enumerate(instr):
+    surf = font.render(text, True, white)
+    screen.blit(surf, (10, 10 + i * 25))
+
+  pygame.display.flip()
+  clock.tick(60)
+  
+pygame.quit()
