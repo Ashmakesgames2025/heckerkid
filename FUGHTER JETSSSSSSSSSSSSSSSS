@@ -1,0 +1,73 @@
+import pygame
+import random
+pygame.init()
+width = 600
+height = 400
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("JET")
+clock = pygame.time.Clock()
+bg = (5, 5, 20)
+white = (205, 205, 220)
+flamecolor = (255, 150, 0)
+bodycolor1 = (245, 54, 0)
+wingcolor1 = (200, 30, 0)
+bodycolor2 = (0, 108, 255)
+wingcolor2 = (30, 90, 200)
+bulletcolor = (255, 255, 0)
+def funcstar():
+  for star in stars:
+    pygame.draw.circle(screen, white, (star['x'], star['y']), star['size'])
+    star['y'] += star['speed']
+    if star['y'] > height:
+      star['y'] = 0
+      star['x'] = random.randint(2, width - 2)
+      star['size'] = random.uniform(1.00, 4.00)
+      star['speed'] = random.uniform(1.5, 2.5)
+stars = []
+for _ in range(150):
+  star = {
+    'x' : random.randint(2, width - 2),
+    'y' : random.randint(2, height - 2), 
+    'size' : random.uniform(1.00, 4.00),
+    'speed' : random.uniform(1.5, 2.5)
+  }
+  stars.append(star)
+class Player:
+  def __init__(self, bodycolor, wingcolor):
+    self.width = 48
+    self.height = 56
+    self.x = (width - self.width) // 2
+    self.y = height - self.height - 20
+    self.bodycolor = bodycolor
+    self.wingcolor = wingcolor
+    self.bullets = []
+  def draw(self):
+    cx = self.x - (self.width // 2)
+    #flame
+    flame_h = random.randint(11, 20)
+    pygame.draw.polygon(screen, flamecolor, [(cx + 6, self.y + 15), (cx - 6, self.y + 15), (cx, self.y + flame_h + 15)])
+    #body
+    pygame.draw.polygon(screen, self.bodycolor, [(cx - 9, self.y), 
+                                            (cx, self.y - 7), 
+                                            (cx + 9, self.y), 
+                                            (cx + 9, self.y + 20), 
+                                            (cx - 9, self.y + 20)
+                                           ])
+    #wings
+    pygame.draw.polygon(screen, self.wingcolor, [(cx + 9, self.y), (cx + 6, self.y + 10), (cx + 22, self.y + 17)])
+    pygame.draw.polygon(screen, self.wingcolor, [(cx - 9, self.y), (cx - 6, self.y + 10), (cx - 22, self.y + 17)])
+    #window
+    pygame.draw.ellipse(screen, white, (cx - 3, self.y - 2, 6, 8))
+  
+player = Player(bodycolor1, wingcolor1)
+running = True
+while running:
+  screen.fill(bg)
+  funcstar()
+  player.draw()
+  clock.tick(60)
+  pygame.display.update()
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+pygame.quit()
