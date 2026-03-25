@@ -38,9 +38,9 @@ class Bullet:
     self.height = 5
     self.x = x
     self.y = y
-    self.speed = 3
+    self.speed = 2.5
   def draw(self):
-    if self.y < -1:
+    if self.y > -1:
       pygame.draw.rect(screen, bulletcolor, (self.x, self.y, self.width, self.height))
   def ascend(self):
     self.y -= self.speed
@@ -50,6 +50,7 @@ class Player:
     self.height = 56
     self.x = (width - self.width) // 2
     self.y = height - self.height - 20
+    self.cx = self.x - (self.width // 2)
     self.speed = 6
     self.bodycolor = bodycolor
     self.wingcolor = wingcolor
@@ -64,7 +65,7 @@ class Player:
   def right(self):
     self.x = min(width, self.x + self.speed)
   def shoot(self):
-    b = Bullet(self.x, self.y)
+    b = Bullet(self.cx, self.y)
     self.bullets.append(b)
   def update(self):
     if self.cooldown > 0:
@@ -73,7 +74,7 @@ class Player:
       b.ascend()
     self.bullets = [b for b in self.bullets if b.y > -5]
   def draw(self):
-    cx = self.x - (self.width // 2)
+    cx = self.cx
     #flame
     flame_h = random.randint(11, 20)
     pygame.draw.polygon(screen, flamecolor, [(cx + 6, self.y + 15), (cx - 6, self.y + 15), (cx, self.y + flame_h + 15)])
@@ -111,6 +112,8 @@ while running:
       player.left()
     if keys[pygame.K_d]:
       player.right()
+    if keys[pygame.K_a]:
+      player.left()
     if keys[pygame.K_SPACE]:
       player.shoot()
   pygame.display.update()
