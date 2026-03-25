@@ -62,8 +62,10 @@ class Player:
     self.y = min(height, self.y + self.speed)
   def left(self):
     self.x = max(0, self.x - self.speed)
+    self.cx = self.x - (self.width // 2)
   def right(self):
     self.x = min(width, self.x + self.speed)
+    self.cx = self.x - (self.width // 2)
   def shoot(self):
     b = Bullet(self.cx, self.y)
     self.bullets.append(b)
