@@ -1,0 +1,84 @@
+import pygame
+pygame.init()
+width = 600
+height = 400
+screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
+lblue = (174, 174, 255)
+green = (0, 230, 0)
+blue = (0, 0, 255)
+tan = (211, 198, 132)
+
+playerx = 200
+playery = height // 2
+playerpos = playerx, playery
+p_velocity_x = 0
+p_velocity_y = 0
+jump = False
+
+platform_list = [(0, 300, 600, 100), (250, 250, 40, 50), (300, 200, 40, 10)]
+
+def player(player_hitbox):
+  pygame.draw.rect(screen, blue, (playerx, playery + 10, player_hitbox[2], player_hitbox[3] - 10))
+  pygame.draw.circle(screen, blue, (playerx + 10, playery + 10), 10)
+  pygame.draw.circle(screen, tan, (playerx + 10, playery - 7.5), 9)
+
+def platform(x, y, w, h):
+  pygame.draw.rect(screen, green, (x, y, w, h))
+  global p_velocity_y, p_velocity_x, playery, jump, player_hitbox
+  
+  platform = pygame.Rect(x, y, w, h)
+  
+  if player_hitbox.colliderect(platform):
+    if p_velocity_y > 0:
+      if playerx + player_hitbox[2] == platform.right or playerx == platform.left:
+        p_velocity_x = -p_velocity_x
+      
+      playery = platform.top - 30
+      p_velocity_y = 0
+      jump = True
+    
+    if p_velocity_y < 0:
+      if playerx + player_hitbox[2] == platform.right or playerx == platform.left:
+        p_velocity_x = -p_velocity_x
+      
+      p_velocity_y = 0
+      playery = platform.bottom
+
+running = True
+while running:
+  screen.fill(lblue)
+  player_hitbox = pygame.Rect(playerx, playery, 20, 30)
+
+
+  p_velocity_y += 0.1
+  playerx += p_velocity_x
+  playery += p_velocity_y
+  if p_velocity_x < 0:
+    p_velocity_x += 2
+  elif p_velocity_x > 0:
+    p_velocity_x -= 2
+  if playerx + player_hitbox[2] > width:
+    playerx = 1
+  elif playerx < -player_hitbox[2]:
+    playerx = width - player_hitbox[2] - 1
+  player(player_hitbox)
+  for aplatform in platform_list:
+    platform(aplatform[0], aplatform[1], aplatform[2], aplatform[3])
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      running = False
+  keys = pygame.key.get_pressed()
+  if keys[pygame.K_UP]:
+    if jump == True:
+      playery -= 1
+      p_velocity_y = -3
+      jump = False
+  if keys[pygame.K_LEFT]:
+    p_velocity_x -= 4
+  if keys[pygame.K_RIGHT]:
+    p_velocity_x += 4
+
+  pygame.display.update()
+  clock.tick(60)
+pygame.quit()
